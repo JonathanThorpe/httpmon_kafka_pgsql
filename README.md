@@ -1,5 +1,5 @@
 # HTTP Monitoring using Kafka and PostgreSQL
-This is a small demonstration program developed to demonstrate:
+This is a small demonstration program developed to provide:
 
 1. A simple **monitoring agent / producer** that:
 	a. Monitors HTTP(S) URLs, capturing response code, response time and optionally, whether or not the body of the response matches a specific regular expression.
@@ -118,7 +118,7 @@ This project uses [SemVer](http://semver.org/) for versioning.
 
 ## License
 
-This project is licenced under the MIT License - see the [LICENCE.md](https://gist.github.com/PurpleBooth/LICENSE.md) file for details
+This project is licenced under the MIT License - see the [LICENCE.md](LICENCE.md) file for details
 
 ## Acknowledgments
 * [Application Template](https://github.com/mdklatt/cookiecutter-python-app) used with [cookiecutter](https://github.com/cookiecutter/cookiecutter). Mainly the Logger class in `src/core/logger.py` was used verbatim from this.
