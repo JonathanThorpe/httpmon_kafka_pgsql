@@ -31,7 +31,6 @@ class MonConsumer:
                                     value['responseTime'],
                                     value['errorMessage'])
 
-  
   async def batchDBWrite(self, messages):
     async with self.pgsql.connection.transaction():
       for msg in messages:
@@ -45,7 +44,31 @@ class MonConsumer:
         finally:
           if value:
             await self.insertDB(value)
-            
+  
+  async def consumeMessages(self):
+    # Consume messages
+    while True:
+      result = await self.consumer.getmany(timeout_ms = self.config['batch_timeout_ms'])
+      for tp, messages in result.items():
+        logger.debug("%d messages for processing on partition %d" % (len(messages), tp.partition))
+        if messages:
+          txOk = True
+          try:
+            #Could consider breaking up database transations into smaller chunks
+            await self.batchDBWrite(messages)
+          except KeyError as error:
+            logger.critical('Malformed message - not committing topic: %s' % (str(error),))
+            txOk = False
+          except:
+            error = sys.exc_info()[0]
+            logger.critical('Unable to complete database transation - not committing topic: %s' % (str(error),))
+            txOk = False
+          
+          if txOk:
+            offset = messages[-1].offset + 1
+            logger.debug("Committing topic partition %d with offset %d" % (tp.partition, offset))
+            await self.consumer.commit({tp: offset})    
+
   async def initConsumer(self):
     await self.pgsql.connect()
 
@@ -60,32 +83,13 @@ class MonConsumer:
       auto_offset_reset='earliest'
     )
 
-    await self.consumer.start()
-    logger.info('Consumer started running with a batch timeout of %dms' % (self.config['batch_timeout_ms'],))
     try:
-      # Consume messages
-      while True:
-        result = await self.consumer.getmany(timeout_ms = self.config['batch_timeout_ms'])
-        for tp, messages in result.items():
-          logger.debug("%d messages for processing on partition %d" % (len(messages), tp.partition))
-          if messages:
-            txOk = True
-            try:
-              #Could consider breaking up database transations into smaller chunks
-              await self.batchDBWrite(messages)
-            except KeyError as error:
-              logger.critical('Malformed message - not committing topic: %s' % (str(error),))
-              txOk = False
-            except:
-              error = sys.exc_info()[0]
-              logger.critical('Unable to complete database transation - not committing topic: %s' % (str(error),))
-              txOk = False
-            
-            if txOk:
-              offset = messages[-1].offset + 1
-              logger.debug("Committing topic partition %d with offset %d" % (tp.partition, offset))
-              await self.consumer.commit({tp: offset})
-
+      await self.consumer.start()
+      logger.info('Consumer started running with a batch timeout of %dms' % (self.config['batch_timeout_ms'],))
+      self.consumeMessages()
+    except:
+      error = sys.exc_info()[0]
+      logger.critical('Unable to consume messages - fatal error: %s' % (str(error),))
     finally:
       # Will leave consumer group;
       await self.consumer.stop()
