@@ -16,6 +16,9 @@ This application requires Python 3 - dependent modules are specified in `require
 ```
 pip3 install -r requirements.txt
 ```
+
+Alternatively, installing the application with `pip install .` will also consume the `requirements.txt` file.
+
 Other dependencies:
 * Kafka Cluster which supports TLS
 * PostgreSQL Database Server
@@ -70,11 +73,20 @@ If specifying a site with defaults, ensure that the item is specified as an empt
 ## Running the Application
 To keep the application simple and maximise code re-use, it has been packaged as several modules which can all by run form the same package.
 
-### Command Line
-Running the application from the console at the source tree is as follows:
+### Installation
+
+You may install the package by running:
 ```
-usage: src.httpmon_kafka_pgsql.core.cli [-h] [-c CONFIG] [-v]
-                                        [-m {agent,writer,init-schema,dbdump}]
+pip install .
+```
+
+This will also consume the `requirements.txt` file and will provide a `httpmon-kafka-pgsql` console script that can be run.
+
+### Command Line
+Running the application from the console is as follows:
+```
+usage: httpmon-kafka-pgsql [-h] [-c CONFIG] [-v]
+                           [-m {agent,writer,init-schema,dbdump}]
 
 Run the application as either the agent (producer) or the receiver (consumer,
 DB writer)
@@ -92,6 +104,12 @@ optional arguments:
                         schema: initialise the PostgreSQL database schema.
                         dbdump: dump database contents
 ```
+
+Note: If you have not installed the package with `pip`, you may run the application from the repository with:
+```
+python -m src.httpmon_kafka_pgsql <arguments>
+```
+
 The `--config` parameter can also be specified as the `APP_CONFIG` environment variable and refers to a path to the configuration YAML file.
 
 The `--mode` parameter (also specifyable as `APP_MODE`) specifies how the program is run:
@@ -158,5 +176,4 @@ This project uses [SemVer](http://semver.org/) for versioning.
 This project is licenced under the MIT License - see the [LICENCE.md](LICENCE.md) file for details
 
 ## Acknowledgments
-* [Application Template](https://github.com/mdklatt/cookiecutter-python-app) used with [cookiecutter](https://github.com/cookiecutter/cookiecutter). Mainly the Logger class in `src/core/logger.py` was used verbatim from this.
-
+* [Application Template](https://github.com/mdklatt/cookiecutter-python-app) used with [cookiecutter](https://github.com/cookiecutter/cookiecutter). The Logger class in `src/core/logger.py` and `setup.py` are mostly unchanged.

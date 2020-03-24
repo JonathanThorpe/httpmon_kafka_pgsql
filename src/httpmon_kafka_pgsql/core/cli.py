@@ -4,8 +4,7 @@ import os
 from ..__version__ import __version__
 
 #Set up the argument parser
-parser = argparse.ArgumentParser(description='Run the application as either the agent (producer) or the receiver (consumer, DB writer)',
-                                 prog=__name__)
+parser = argparse.ArgumentParser(description='Run the application as either the agent (producer) or the receiver (consumer, DB writer)')
 
 parser.add_argument('-c', '--config',
                     type=str,
