@@ -1,14 +1,14 @@
 # HTTP Monitoring using Kafka and PostgreSQL
 This is a small demonstration program developed to provide:
 
-1. A simple **monitoring agent / producer** that:
-	a. Monitors HTTP(S) URLs, capturing response code, response time and optionally, whether or not the body of the response matches a specific regular expression.
-	b. Can monitor multiple URLs at the same time.
-	c. Produces messages to a Kafka topic for later consumption.
+1. A simple **monitoring agent / producer** that:  
+  a. Monitors HTTP(S) URLs, capturing response code, response time and optionally, whether or not the body of the response matches a specific regular expression.  
+  b. Can monitor multiple URLs at the same time.  
+  c. Produces messages to a Kafka topic for later consumption.  
 
-2. A **consumer / writer** which:
-  a. Consumes messages from a Kafka topic in a batch.
-  b. Using transactional logic, *attempts* to commit messages to the database before setting the offset on the topic. 
+2. A **consumer / writer** which:  
+  a. Consumes messages from a Kafka topic in a batch.  
+  b. Using transactional logic, *attempts* to commit messages to the database before setting the offset on the topic.  
 
 ## Requirements
 This application requires Python 3 - dependent modules are specified in `requirements.txt` which may be installed with:
