@@ -1,0 +1,22 @@
+from .defaults import kafkaConsumerDefaults, postgreSQLDefaults
+from ..core.config import config
+from ..core.logger import logger
+from .mon_consumer import MonConsumer
+from .mon_pg import MonPostgresSQL
+import asyncio
+
+def initEventLoop():
+  eventLoop = asyncio.get_event_loop()
+  pgsql = MonPostgresSQL(config.getDBConfig('writer'))
+  monConsumer = MonConsumer(config.getKafkaConfig('monitoring'), eventLoop, pgsql)  
+  eventLoop.run_forever()
+
+def main():
+  #Load defaults for anything that hasn't been specified
+  #in the configuration file
+  config.setDefaults('kafka', kafkaConsumerDefaults)
+  config.setDefaults('database', postgreSQLDefaults)
+  #Start the event loop
+  initEventLoop()
+
+  

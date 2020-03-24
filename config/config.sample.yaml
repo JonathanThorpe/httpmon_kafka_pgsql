@@ -1,0 +1,47 @@
+#Log level can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL (defaults to ERROR)
+loglevel: DEBUG
+
+#Define parameters for connecting to Kafka
+#
+#bootstrap_servers: Kafka bootstrap servers
+#ssl_cafile: CA file for validating the connection to the Kafka cluster
+#ssl_certfile: Certificate file for authentication
+#ssl_keyfile: Private Key file for the above
+#topic: Kafka topic to produce messages to (Agent) or consume from (Writer)
+#
+#Writer-specific parameters:
+#  batch_timeout_ms: Milliseconds to timeout when batching transactions to the database.
+
+kafka:
+  monitoring:
+    bootstrap_servers: "<kafka>:22965"
+    ssl_cafile: "config/ca.crt"
+    ssl_certfile: "config/monitoring-service.crt"
+    ssl_keyfile: "config/monitoring-private.key"
+    topic: monitoring
+    batch_timeout_ms: 100
+
+#Define a dictionary of web sites. These are defined as follows:
+#Top level: URL to monitor including the protocol and optionally, port
+#  valid_status_codes: Status codes that are considered valid. Default: 200
+#  regex: Regular expression to apply to the body of the response. Default: (none)
+#  timeout: Timeout for connecting to the site (seconds). Default: 120
+#  frequency: How frequent to monitor the site (seconds). Default: 60
+#
+#If specifying a site with defaults, ensure that the item is specified as
+#an empty dictionary (e.g. "site": {})
+websites:
+  "https://www.google.com":
+    valid_status_codes:
+      - 200
+      - 302
+    regex: html
+    timeout: 60
+    frequency: 2
+  "http://127.0.0.2": {}
+
+#Database DSN - this is only applicable when the application is run in writer, init-schema or dbdump modes.
+#If this is only being run as an agent, then this part of the configuration may be omitted
+database:
+  writer:
+    dsn: "postgres://<user>:<password>@<host>:<port>/defaultdb?sslmode=require"
