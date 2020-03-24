@@ -4,8 +4,8 @@ FROM python:3.7-alpine
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev
 COPY . /app
 WORKDIR /app
-RUN pip install -r requirements.txt
+RUN pip install .
 
 #Remove build dependencies to keep the image size small
 RUN apk del .build-deps
-CMD python -m src.httpmon_kafka_pgsql
+CMD httpmon-kafka-pgsql
