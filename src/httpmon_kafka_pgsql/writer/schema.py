@@ -5,6 +5,7 @@ from .mon_consumer import MonConsumer
 import asyncio
 from .mon_pg import MonPostgresSQL
 import json
+from asyncpg.exceptions import DuplicateTableError
 
 schema = """
 CREATE TABLE mon_daily (
@@ -23,7 +24,10 @@ CREATE INDEX mon_daily_url ON mon_daily (url);
 async def createSchema():
   pg = MonPostgresSQL(config.getDBConfig('writer'))
   await pg.connect()
-  await pg.connection.execute(schema)
+  try:
+    await pg.connection.execute(schema)
+  except DuplicateTableError as error:
+    logger.warning('Table already exists - will not remove automatically: %s' % (error,))
   await pg.connection.close()
 
 async def dumpDBasJSON():
