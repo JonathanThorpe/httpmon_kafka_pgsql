@@ -1,5 +1,5 @@
 #Log level can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL (defaults to ERROR)
-loglevel: DEBUG
+loglevel: ERROR
 
 #Define parameters for connecting to Kafka
 #
