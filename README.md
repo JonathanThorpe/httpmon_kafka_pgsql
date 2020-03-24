@@ -1,12 +1,12 @@
 # HTTP Monitoring using Kafka and PostgreSQL
 This is a small demonstration program developed to provide:
 
-1. A simple **monitoring agent / producer** that:  
+1. A simple **monitoring agent / Kafka producer** that:  
   a. Monitors HTTP(S) URLs, capturing response code, response time and optionally, whether or not the body of the response matches a specific regular expression.  
   b. Can monitor multiple URLs at the same time.  
   c. Produces messages to a Kafka topic for later consumption.  
 
-2. A **consumer / writer** which:  
+2. A **Kafka consumer / PostgreSQL writer** which:  
   a. Consumes messages from a Kafka topic in a batch.  
   b. Using transactional logic, *attempts* to commit messages to the database before setting the offset on the topic.
 
@@ -37,6 +37,12 @@ Parameters are specified against `kafka: { monitoring: {<params>}` are as follow
 | ssl_certfile | Certificate file for authentication |
 | ssl_keyfile | Private Key file for the above |
 | topic | Kafka topic to produce messages to (Agent) or consume from (Writer) |
+
+For the Agent/Producer, the following parameters are available:
+| Parameter     | Description |
+| --------------| ------------- |
+| acks | Can be 0, 1, all or a number of replicas to replicate to. Default of 1 only waits for Leader to write the request. [more](https://github.com/aio-libs/aiokafka/blob/master/docs/producer.rst#retries-and-message-acknowledgement). |
+
 
 Also, for the Consumer/Writer, the following parameters are available:
 | Parameter     | Description |
@@ -117,7 +123,7 @@ The following can be improved with database handling:
 ## Versioning
 This project uses [SemVer](http://semver.org/) for versioning.
 
-## License
+## Licence
 This project is licenced under the MIT License - see the [LICENCE.md](LICENCE.md) file for details
 
 ## Acknowledgments
