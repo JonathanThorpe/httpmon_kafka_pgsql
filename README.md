@@ -43,7 +43,6 @@ For the Agent/Producer, the following parameters are available:
 | --------------| ------------- |
 | acks | Can be 0, 1, all or a number of replicas to replicate to. Default of 1 only waits for Leader to write the request. [more](https://github.com/aio-libs/aiokafka/blob/master/docs/producer.rst#retries-and-message-acknowledgement). |
 
-
 Also, for the Consumer/Writer, the following parameters are available:
 | Parameter     | Description |
 | --------------| ------------- |
@@ -78,15 +77,19 @@ DB writer)
 optional arguments:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
-                        specify the configuration file
+                        specify the configuration file (Environment Variable:
+                        APP_CONFIG).
   -v, --version         show application version
   -m {agent,writer,init-schema,dbdump}, --mode {agent,writer,init-schema,dbdump}
-                        run as monitoring agent or writer. agent: run as the
-                        monitoring agent, writer: database writer / consumer,
-                        init-schema: initialise the PostgreSQL database
-                        schema. dbdump: dump database contents
+                        run as monitoring agent or writer (Environment
+                        Variable: APP_MODE) agent: run as the monitoring
+                        agent, writer: database writer / consumer, init-
+                        schema: initialise the PostgreSQL database schema.
+                        dbdump: dump database contents
 ```
-The mode parameter specifies how the program is run:
+The `--config` parameter can also be specified as the `APP_CONFIG` environment variable and refers to a path to the configuration YAML file.
+
+The `--mode` parameter (also specifyable as `APP_MODE`) specifies how the program is run:
 * **agent**: Runs as the HTTP Monitoring Agent / Producer.
 * **writer**: Runs as the Consumer / Writer.
 * **init-schema**: Creates the database schema. Does not drop the table if it already exists.
