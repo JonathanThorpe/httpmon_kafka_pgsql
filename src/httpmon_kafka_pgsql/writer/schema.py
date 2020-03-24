@@ -7,8 +7,6 @@ from .mon_pg import MonPostgresSQL
 import json
 
 schema = """
-DROP TABLE IF EXISTS mon_daily;
-
 CREATE TABLE mon_daily (
   ts timestamp NOT NULL, 
   agent uuid NOT NULL,
