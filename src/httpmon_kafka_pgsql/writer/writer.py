@@ -18,5 +18,3 @@ def main():
   config.setDefaults('database', postgreSQLDefaults)
   #Start the event loop
   initEventLoop()
-
-  

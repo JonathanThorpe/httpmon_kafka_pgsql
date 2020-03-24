@@ -26,7 +26,7 @@ class HTTPMonitor:
 
     async with aiohttp.ClientSession() as session:
       while True:
-        logger.info('Connect to target target %s' % (self.url))
+        logger.debug('Connect to target target %s' % (self.url))
         try:
           result['ts'] = str(datetime.utcnow())
           timeStart = time.time() * 1000
@@ -49,7 +49,7 @@ class HTTPMonitor:
             logger.error('Error %s' % (result['errorMessage']))
           await self.callback(result)
 
-        logger.info('Task going to wait for %d seconds for %s' % (self.config['frequency'], self.url))
+        logger.debug('Task going to wait for %d seconds for %s' % (self.config['frequency'], self.url))
         await asyncio.sleep(self.config['frequency'])
 
   def start(self):

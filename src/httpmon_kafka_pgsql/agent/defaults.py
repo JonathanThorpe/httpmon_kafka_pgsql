@@ -13,5 +13,4 @@ kafkaProducerDefaults = {
   'ssl_keyfile': 'config/monitoring-private.key',
   'topic': 'monitoring',
   'consumer_group': 'monitoring',
-  'autocommit_interval_ms': 1000
 }
