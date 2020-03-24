@@ -86,7 +86,7 @@ class MonConsumer:
     try:
       await self.consumer.start()
       logger.info('Consumer started running with a batch timeout of %dms' % (self.config['batch_timeout_ms'],))
-      self.consumeMessages()
+      await self.consumeMessages()
     except:
       error = sys.exc_info()[0]
       logger.critical('Unable to consume messages - fatal error: %s' % (str(error),))
