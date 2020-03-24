@@ -1,0 +1,13 @@
+version: '3'
+services:
+  agent:
+    build: .
+    image: jonathanthorpe/httpmon_kafka_pgsql:0.1.0
+    environment:
+      APP_MODE: 'agent'
+  writer:
+    image: jonathanthorpe/httpmon_kafka_pgsql:0.1.0
+    depends_on:
+      - agent
+    environment:
+      APP_MODE: 'writer'
