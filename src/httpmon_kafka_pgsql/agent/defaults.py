@@ -13,4 +13,5 @@ kafkaProducerDefaults = {
   'ssl_keyfile': 'config/monitoring-private.key',
   'topic': 'monitoring',
   'consumer_group': 'monitoring',
+  'acks': 1 
 }

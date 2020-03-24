@@ -30,7 +30,8 @@ class MonProducer:
       loop = self.eventLoop,
       bootstrap_servers=self.config['bootstrap_servers'],
       security_protocol="SSL",
-      ssl_context=self.sslContext
+      ssl_context=self.sslContext,
+      acks=self.config['acks']
     )
 
     await self.producer.start()
