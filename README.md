@@ -8,7 +8,7 @@ This is a small demonstration program developed to provide:
 
 2. A **consumer / writer** which:  
   a. Consumes messages from a Kafka topic in a batch.  
-  b. Using transactional logic, *attempts* to commit messages to the database before setting the offset on the topic.  
+  b. Using transactional logic, *attempts* to commit messages to the database before setting the offset on the topic.
 
 ## Requirements
 This application requires Python 3 - dependent modules are specified in `requirements.txt` which may be installed with:
@@ -105,7 +105,9 @@ The monitoring agent naively determines the response time from the moment the GE
 * The application runs a single aiohttp client session which takes advantage of connection pooling. This has the advantage of being more efficient, but does not account for delays resulting from slow DNS resolution for example.
 
 #### Database Handling
-The Consumer/Writer simply dumps the data to a single table called `mon_daily`. There is no expiry of records, summarisation etc - you can do with the data as you wish for now.
+The following can be improved with database handling:
+* The Consumer/Writer simply dumps the data to a single table called `mon_daily`. There is no expiry of records, summarisation etc - you can do with the data as you wish for now.
+* There is no control over how many inserts may be made per transaction. This could become quite large which, depending on the `batch_timeout_ms` setting, could result in multiple Consumers within a consumer group attempting to commit the same messages to the database. The constraints imposed by the composite primary key avoid duplicate records, but it's not very efficient. One way to balance this could be to specify a maximum number of messages per transaction and then regularly set the topic offset.
 
 ## Still to Come...
 * Package properly
@@ -113,11 +115,9 @@ The Consumer/Writer simply dumps the data to a single table called `mon_daily`. 
 * Write `Dockerfile` and `docker-compose.yml` to help get up and running quickly.
 
 ## Versioning
-
 This project uses [SemVer](http://semver.org/) for versioning.
 
 ## License
-
 This project is licenced under the MIT License - see the [LICENCE.md](LICENCE.md) file for details
 
 ## Acknowledgments
