@@ -6,7 +6,7 @@ parser = argparse.ArgumentParser(description='Run the application as either the 
 
 parser.add_argument('-c', '--config',
                     type=str,
-                    default='config.yaml',
+                    default='config/config.yaml',
                     help='specify the configuration file')
 
 parser.add_argument('-m', '--mode',

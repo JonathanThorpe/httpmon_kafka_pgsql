@@ -10,8 +10,7 @@ import sys
 
 def main():
   #Main entry point
-  basePath = os.path.abspath(os.path.dirname(sys.argv[0]))
-  config.load(os.path.join(basePath, args.config))
+  config.load(args.config)
   logger.start(config.getSetting('loglevel', 'ERROR'))
   
   if args.mode == 'agent':
