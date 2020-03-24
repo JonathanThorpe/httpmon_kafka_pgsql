@@ -1,3 +1,4 @@
+
 # HTTP Monitoring using Kafka and PostgreSQL
 This is a small demonstration program developed to provide:
 
@@ -42,6 +43,8 @@ For the Agent/Producer, the following parameters are available:
 | Parameter     | Description |
 | --------------| ------------- |
 | acks | Can be 0, 1, all or a number of replicas to replicate to. Default of 1 only waits for Leader to write the request. [more](https://github.com/aio-libs/aiokafka/blob/master/docs/producer.rst#retries-and-message-acknowledgement). |
+| request_timeout_ms | Request timeout in ms - configure carefully to account for latency during rebalancing. Default: 40000 |
+
 
 Also, for the Consumer/Writer, the following parameters are available:
 | Parameter     | Description |
@@ -65,7 +68,9 @@ If specifying a site with defaults, ensure that the item is specified as an empt
 | dsn | Connection string for connecting to PostgreSQL - e.g. `postgres://<user>:<password>@<host>:<port>/defaultdb?sslmode=require` |
 
 ## Running the Application
-To keep the application simple and maximise code re-use, it has been packaged as several modules.
+To keep the application simple and maximise code re-use, it has been packaged as several modules which can all by run form the same package.
+
+### Command Line
 Running the application from the console at the source tree is as follows:
 ```
 usage: src.httpmon_kafka_pgsql.core.cli [-h] [-c CONFIG] [-v]
@@ -95,6 +100,30 @@ The `--mode` parameter (also specifyable as `APP_MODE`) specifies how the progra
 * **init-schema**: Creates the database schema. Does not drop the table if it already exists.
 * **dbdump**: Dump the database contents.
 
+### Docker Container
+A `Dockerfile` is included which will build the image which can be run as follows:
+```
+docker build -t httpmon_kafka_pgsql:0.1.0 .
+```
+The default configuration expects a file in `config/config.yaml` so this file will either need to be added (i.e. modified from `config/config.sample.yaml`) or a volume configured for your Docker environment to map this to a file that exists.
+
+#### Initialising the Database
+To initialise the database, run the following:
+```
+docker run --rm -e "APP_MODE=init-schema" -it httpmon_kafka_pgsql:0.1.0
+```
+
+#### Dumping the Database
+To dump the database contents, run the following:
+```
+docker run --rm -e "APP_MODE=dbdump" -it httpmon_kafka_pgsql:0.1.0
+```
+
+#### Docker-compose
+A `docker-compose.yml` file is also included which will build the image and start up both the agent and writer. 
+
+**Note that running `docker-compose up` assumes that the database has already been initialised. If you need to do this, run the container with the `APP_MODE=init-schema` first.**
+
 ## Design
 ### Monitoring Agent / Producer
 Design considerations of the Monitoring Agent/Producer are as follows:
@@ -121,7 +150,6 @@ The following can be improved with database handling:
 ## Still to Come...
 * Package properly
 * Write tests
-* Write `Dockerfile` and `docker-compose.yml` to help get up and running quickly.
 
 ## Versioning
 This project uses [SemVer](http://semver.org/) for versioning.

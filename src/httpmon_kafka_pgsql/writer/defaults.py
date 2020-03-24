@@ -6,7 +6,7 @@ kafkaConsumerDefaults = {
   'ssl_keyfile': 'config/monitoring-private.key',
   'topic': 'monitoring',
   'consumer_group': 'monitoring',
-  'batch_timeout_ms': 10000 
+  'batch_timeout_ms': 10000
 }
 
 postgreSQLDefaults = {

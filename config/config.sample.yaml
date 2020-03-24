@@ -11,6 +11,10 @@ loglevel: ERROR
 #
 #Writer-specific parameters:
 #  batch_timeout_ms: Milliseconds to timeout when batching transactions to the database.
+#
+#Monitor/Producer-specific parameters:
+#  acks: Can be 0, 1, all or a number of replicas to replicate to. Default of 1 only waits for Leader to write the request.
+#  request_timeout_ms: Request timeout - configure carefully to account for latency during rebalancing. Default: 40000
 
 kafka:
   monitoring:
@@ -20,6 +24,7 @@ kafka:
     ssl_keyfile: "config/monitoring-private.key"
     topic: monitoring
     batch_timeout_ms: 100
+    acks: 1
 
 #Define a dictionary of web sites. These are defined as follows:
 #Top level: URL to monitor including the protocol and optionally, port

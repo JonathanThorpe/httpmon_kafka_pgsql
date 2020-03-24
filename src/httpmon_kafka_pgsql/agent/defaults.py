@@ -13,5 +13,6 @@ kafkaProducerDefaults = {
   'ssl_keyfile': 'config/monitoring-private.key',
   'topic': 'monitoring',
   'consumer_group': 'monitoring',
-  'acks': 1 
+  'acks': 1,
+  'request_timeout_ms': 40000
 }
