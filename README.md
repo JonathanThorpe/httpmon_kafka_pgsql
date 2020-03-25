@@ -46,7 +46,7 @@ Parameters are specified against `kafka: { monitoring: {<params>}` are as follow
 For the Agent/Producer, the following parameters are available:
 | Parameter     | Description |
 | --------------| ------------- |
-| acks | Can be 0, 1, all or a number of replicas to replicate to. Default of 1 only waits for Leader to write the request. [more](https://github.com/aio-libs/aiokafka/blob/master/docs/producer.rst#retries-and-message-acknowledgement). |
+| acks | Can be 0, 1, all or a number of replicas to replicate to. Default of 1 only waits for Leader to write the request. [Read more here](https://github.com/aio-libs/aiokafka/blob/master/docs/producer.rst#retries-and-message-acknowledgement). |
 | request_timeout_ms | Request timeout in ms - configure carefully to account for latency during rebalancing. Default: 40000 |
 
 
@@ -72,7 +72,7 @@ If specifying a site with defaults, ensure that the item is specified as an empt
 | dsn | Connection string for connecting to PostgreSQL - e.g. `postgres://<user>:<password>@<host>:<port>/defaultdb?sslmode=require` |
 
 ## Running the Application
-To keep the application simple and maximise code re-use, it has been packaged as several modules which can all by run form the same package.
+To keep the application simple and maximise code re-use, it has been packaged as several modules which can all be run form the same package.
 
 ### Installation
 
@@ -170,16 +170,16 @@ The monitoring agent naively determines the response time from the moment the GE
 #### Database Handling
 The following can be improved with database handling:
 * The Consumer/Writer simply dumps the data to a single table called `mon_daily`. There is no expiry of records, summarisation etc - you can do with the data as you wish for now.
-* There is no control over how many inserts may be made per transaction. This could become quite large which, depending on the `batch_timeout_ms` setting, could result in multiple Consumers within a consumer group attempting to commit the same messages to the database. The constraints imposed by the composite primary key avoid duplicate records, but it's not very efficient. One way to balance this could be to specify a maximum number of messages per transaction and then regularly set the topic offset.
+* There is no control over how many inserts may be made per transaction. This could become quite large, which, depending on the `batch_timeout_ms` setting, could result in multiple Consumers within a consumer group attempting to commit the same messages to the database. The constraints imposed by the composite primary key avoid duplicate records, but it's not very efficient. One way to balance this could be to specify a maximum number of messages per transaction and then regularly set the topic offset.
 
 ## Still to Come...
-* Write tests
+* Write more tests that provide decent coverage of Kafka Producer / Consumer and the PostgreSQL writer.
 
 ## Versioning
 This project uses [SemVer](http://semver.org/) for versioning.
 
 ## Licence
-This project is licenced under the MIT License - see the [LICENCE.md](LICENCE.md) file for details
+This project is licenced under the MIT License - see the [LICENCE.md](LICENCE.md) file for details.
 
 ## Acknowledgments
 * [Application Template](https://github.com/mdklatt/cookiecutter-python-app) used with [cookiecutter](https://github.com/cookiecutter/cookiecutter). The Logger class in `src/core/logger.py` and `setup.py` are mostly unchanged.
