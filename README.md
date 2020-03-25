@@ -1,4 +1,5 @@
 
+
 # HTTP Monitoring using Kafka and PostgreSQL
 This is a small demonstration program developed to provide:
 
@@ -135,6 +136,12 @@ docker run --rm -e "APP_MODE=init-schema" -it httpmon_kafka_pgsql:0.1.0
 To dump the database contents, run the following:
 ```
 docker run --rm -e "APP_MODE=dbdump" -it httpmon_kafka_pgsql:0.1.0
+```
+
+#### Running Tests
+To set up a container that installs the appropriate dependencies (e.g. pytest) and run the test suite, run:
+```
+docker run --rm -it httpmon_kafka_pgsql:0.1.0 /app/test/run.sh
 ```
 
 #### Docker-compose
