@@ -1,5 +1,5 @@
 from .core.config import config
-from .core.cli import args
+from .core.cli import parseArgs
 from .core.logger import logger
 from .agent.agent import main as agent
 from .writer.writer import main as writer
@@ -10,6 +10,7 @@ import sys
 
 def main():
   #Main entry point
+  args = parseArgs(sys.argv[1:])
   config.load(args.config)
   logger.start(config.getSetting('loglevel', 'ERROR'))
   
