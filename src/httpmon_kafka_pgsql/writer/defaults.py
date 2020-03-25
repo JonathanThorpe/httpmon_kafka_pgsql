@@ -1,3 +1,5 @@
+#This file contains defaults which are applied through the config core.config module's setDefaults function.
+
 kafkaConsumerDefaults = {
   'bootstrap_servers': '127.0.0.1:9092',
   'security_protocol': 'SSL',

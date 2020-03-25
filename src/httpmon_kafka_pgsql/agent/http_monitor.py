@@ -24,17 +24,22 @@ class HTTPMonitor:
       'url': self.url
     }
 
+    #Starts a new HTTP client session which is re-used between requests.
     async with aiohttp.ClientSession() as session:
       while True:
         logger.debug('Connect to target target %s' % (self.url))
         try:
+          #Retrieve a UTC timestamp at the start of the GET request
           result['ts'] = str(datetime.utcnow())
           timeStart = time.time() * 1000
+
+          #Attempt to perform the GET request
           async with session.get(self.url, timeout=self.config['timeout']) as response:
+            #Verify the regular expression associated with the site if it has been specified.
             if (self.regex is not None):
               result['regexResult'] = self.regex.search(await response.text(), re.MULTILINE) is not None
             result['responseCode'] = response.status
-            
+        
         except ClientConnectorError as error:
           result['errorMessage'] = str(error)
         except asyncio.TimeoutError as error:

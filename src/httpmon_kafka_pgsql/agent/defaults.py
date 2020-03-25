@@ -1,3 +1,5 @@
+#This file contains defaults which are applied through the config core.config module's setDefaults function.
+
 siteDefaults = {
   'valid_status_codes': [ 200 ],
   'regex': '',

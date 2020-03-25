@@ -22,6 +22,7 @@ CREATE TABLE mon_daily (
 CREATE INDEX mon_daily_url ON mon_daily (url);
 """
 async def createSchema():
+  #Creates the database schema
   pg = MonPostgresSQL(config.getDBConfig('writer'))
   await pg.connect()
   try:
@@ -31,6 +32,7 @@ async def createSchema():
   await pg.connection.close()
 
 async def dumpDBasJSON():
+  #Dumps the database contents - useful for debugging.
   pg = MonPostgresSQL(config.getDBConfig('writer'))
   await pg.connect()
   results = await pg.connection.fetch('SELECT * FROM mon_daily')

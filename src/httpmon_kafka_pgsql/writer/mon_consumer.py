@@ -48,6 +48,7 @@ class MonConsumer:
   async def consumeMessages(self):
     # Consume messages
     while True:
+      #Retrieve a batch of messages from the topic and timeout within the specified period
       result = await self.consumer.getmany(timeout_ms = self.config['batch_timeout_ms'])
       for tp, messages in result.items():
         logger.debug("%d messages for processing on partition %d" % (len(messages), tp.partition))
@@ -65,13 +66,18 @@ class MonConsumer:
             txOk = False
           
           if txOk:
+            #If the transaction is successful, set the offset to the value of the last message + 1
             offset = messages[-1].offset + 1
             logger.debug("Committing topic partition %d with offset %d" % (tp.partition, offset))
+
+            #Commit the topic partition offset.
             await self.consumer.commit({tp: offset})    
 
   async def initConsumer(self):
+    #Connect to the database
     await self.pgsql.connect()
 
+    #Connect to Kafka as a consumer
     self.consumer = AIOKafkaConsumer(
       self.config['topic'],
       loop = self.eventLoop,
@@ -94,12 +100,13 @@ class MonConsumer:
       # Will leave consumer group;
       await self.consumer.stop()
 
+  def start(self):
+    self.initTask = self.eventLoop.create_task(self.initConsumer())
+    self.eventLoop.run_until_complete(self.initTask)
+
   def __init__(self, config, eventLoop, pgsql):
     self.config = config
     self.eventLoop = eventLoop
     self.sslContext = self.getSSLContext()
     self.pgsql = pgsql
-
-    self.initTask = self.eventLoop.create_task(self.initConsumer())
-    self.eventLoop.run_until_complete(self.initTask)
     

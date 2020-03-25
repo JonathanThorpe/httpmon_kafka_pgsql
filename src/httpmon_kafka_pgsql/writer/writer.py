@@ -6,9 +6,19 @@ from .mon_pg import MonPostgresSQL
 import asyncio
 
 def initEventLoop():
+  #Create new event loop
   eventLoop = asyncio.get_event_loop()
+  
+  #Create a new PostgreSQL database connection based on the configuration
   pgsql = MonPostgresSQL(config.getDBConfig('writer'))
+
+  #Start the monitoring consumer.
   monConsumer = MonConsumer(config.getKafkaConfig('monitoring'), eventLoop, pgsql)  
+  
+  #Start the consumer task
+  monConsumer.start()
+
+  #Run the event loop until interrupted
   eventLoop.run_forever()
 
 def main():

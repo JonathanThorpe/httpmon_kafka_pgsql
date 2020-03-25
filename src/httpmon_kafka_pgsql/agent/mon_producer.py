@@ -40,6 +40,8 @@ class MonProducer:
     self.config = config
     self.eventLoop = eventLoop
     self.sslContext = self.getSSLContext()
+
+    #Generate a unique runtime UUID for the agent 
     self.agentUUID = agentUUID or str(uuid.uuid4())
 
     self.initTask = self.eventLoop.create_task(self.initProducer())
