@@ -146,7 +146,7 @@ A `docker-compose.yml` file is also included which will build the image and star
 ### Monitoring Agent / Producer
 Design considerations of the Monitoring Agent/Producer are as follows:
 * Makes use of asynchronous I/O (asyncio, aoihttp, aiokafka) to perform asynchronous monitoring of multiple HTTP(S) URLs simultaneously without the overheads of running a traditional threading model.
-* Monitors each URLs with different specified frequencies.
+* Monitors each URL with different specified frequencies.
 * Captures HTTP response time, HTTP response code, as well as whether or not the body includes a specified regex.
 
 ###  Consumer / Writer
@@ -166,7 +166,6 @@ The following can be improved with database handling:
 * There is no control over how many inserts may be made per transaction. This could become quite large which, depending on the `batch_timeout_ms` setting, could result in multiple Consumers within a consumer group attempting to commit the same messages to the database. The constraints imposed by the composite primary key avoid duplicate records, but it's not very efficient. One way to balance this could be to specify a maximum number of messages per transaction and then regularly set the topic offset.
 
 ## Still to Come...
-* Package properly
 * Write tests
 
 ## Versioning
