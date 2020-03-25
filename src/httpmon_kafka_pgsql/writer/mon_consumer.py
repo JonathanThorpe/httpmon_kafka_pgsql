@@ -1,6 +1,6 @@
 from ..core.logger import logger
+from ..core.kafka_ssl_context import createSSLConext
 from aiokafka import AIOKafkaConsumer
-from aiokafka.helpers import create_ssl_context
 import json
 from datetime import datetime
 import sys
@@ -10,13 +10,6 @@ class MonConsumer:
   config = None
   consumer = None
   sslContext = None
-
-  def getSSLContext(self):
-    return(create_ssl_context(
-      cafile = self.config['ssl_cafile'],
-      certfile = self.config['ssl_certfile'],
-      keyfile = self.config['ssl_keyfile']
-    ))
 
   async def insertDB(self, value):
     ts = datetime.strptime(value['ts'], '%Y-%m-%d %H:%M:%S.%f')
@@ -107,6 +100,8 @@ class MonConsumer:
   def __init__(self, config, eventLoop, pgsql):
     self.config = config
     self.eventLoop = eventLoop
-    self.sslContext = self.getSSLContext()
+    self.sslContext = createSSLConext(cafile = self.config['ssl_cafile'],
+                                      certfile = self.config['ssl_certfile'],
+                                      keyfile = self.config['ssl_keyfile'])
     self.pgsql = pgsql
     

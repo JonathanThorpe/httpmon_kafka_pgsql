@@ -1,5 +1,5 @@
 from aiokafka import AIOKafkaProducer
-from aiokafka.helpers import create_ssl_context
+from ..core.kafka_ssl_context import createSSLConext
 import json
 import uuid
 
@@ -18,13 +18,6 @@ class MonProducer:
     await self.producer.send_and_wait(self.config['topic'],
                                       json.dumps(data).encode('UTF-8'))
 
-  def getSSLContext(self):
-    return(create_ssl_context(
-      cafile = self.config['ssl_cafile'],
-      certfile = self.config['ssl_certfile'],
-      keyfile = self.config['ssl_keyfile']
-    ))
-  
   async def initProducer(self):
     self.producer = AIOKafkaProducer(
       loop = self.eventLoop,
@@ -39,7 +32,9 @@ class MonProducer:
   def __init__(self, config, eventLoop, agentUUID=None):
     self.config = config
     self.eventLoop = eventLoop
-    self.sslContext = self.getSSLContext()
+    self.sslContext = createSSLConext(cafile = self.config['ssl_cafile'],
+                                      certfile = self.config['ssl_certfile'],
+                                      keyfile = self.config['ssl_keyfile'])
 
     #Generate a unique runtime UUID for the agent 
     self.agentUUID = agentUUID or str(uuid.uuid4())
