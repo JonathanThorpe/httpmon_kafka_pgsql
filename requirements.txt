@@ -4,7 +4,7 @@
 PyYAML == 5.1.1
 
 # src/httpmon_kafka_pgsql/agent/http_monitor.py: 2,5
-aiohttp == 3.6.2
+aiohttp == 3.7.4
 
 # src/httpmon_kafka_pgsql/agent/mon_producer.py: 1,2
 # src/httpmon_kafka_pgsql/writer/mon_consumer.py: 2,3
