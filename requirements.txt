@@ -11,4 +11,4 @@ aiohttp == 3.6.2
 aiokafka == 0.5.2
 
 # src/httpmon_kafka_pgsql/writer/mon_pg.py: 2
-asyncpg == 0.20.1
+asyncpg == 0.21.0
